@@ -1,0 +1,192 @@
+{% extends "base.html" %}{% block title %} Catalogue {% endblock %}
+{% block content %}
+<!-- <section class="section is-title-bar">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <ul>
+                    <li>Admin</li>
+                    <li>Dokument</li>
+                </ul>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <div class="buttons is-right">
+                    <a href="https://github.com/vikdiesel/admin-one-bulma-dashboard" target="_blank"
+                        class="button is-primary">
+                        <span class="icon"><i class="mdi mdi-github-circle"></i></span>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<section class="hero is-hero-bar">
+    <div class="hero-body">
+        <div class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title">
+                        Dokumenty
+                    </h1>
+                </div>
+            </div>
+            <div class="level-right" style="display: none;">
+                <div class="level-item"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="card has-table">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-clipboard-list"></i></span>
+            Dokumenty
+        </p>
+        <div class="card-header-icon">
+            <button class="button is-primary js-modal-trigger" data-target="modal-js-example">
+                <span class="icon"><i class="mdi mdi-plus-box is-size-4"></i></span>
+            </button>
+        </div>
+    </header>
+</div>
+<div class="card-content">
+    <div class="b-table has-pagination">
+        <div class="table-wrapper">
+            <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <!-- <th class="is-checkbox-cell">
+                            <label class="b-checkbox checkbox">
+                                <input type="checkbox" value="false">
+                                <span class="check"></span>
+                            </label>
+                        </th> -->
+                        <!-- <th></th> -->
+                        <th>Numer</th>
+                        <th>Data dodania</th>
+                        <th class="is-hidden-mobile">Typ dokumentu</th>
+                        <th class="is-hidden-mobile">Z magazynu</th>
+                        <th class="is-hidden-mobile">Na magazyn</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in documents %}
+                    <tr>
+                        <!-- <td class="is-checkbox-cell">
+                            <label class="b-checkbox checkbox">
+                                <input type="checkbox" value="false">
+                                <span class="check"></span>
+                            </label>
+                        </td> -->
+                        <!-- <td class="is-image-cell">
+                            <div class="image">
+                                <img src="https://avatars.dicebear.com/v2/initials/as.svg" class="is-rounded">
+                            </div>
+                        </td> -->
+                        <td data-label="Numer">{{ document.number }}</td>
+                        <td data-label="Data dodania">{{ document.date_added.strftime("%d-%m-%Y") }}</td>
+                        <td class="is-hidden-mobile" data-label="Typ dokumentu">{{ document.document_type.name }}</td>
+                        <td class="is-hidden-mobile" data-label="Z magazynu">{{ document.warehouse_from.code }}</td>
+                        <td class="is-hidden-mobile" data-label="Na magazyn">{{ document.warehouse_to.code }}</td>
+                        <td class="is-actions-cell">
+                            <div class="buttons is-right">
+                                <button data-document-id="{{ document.id }}"
+                                    class="button is-small is-primary card-header-icon card-toggle document-info"
+                                    type="button">
+                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                </button>
+                                <!-- <button class="button is-small is-danger jb-modal is-hidden-mobile"
+                                    data-target="sample-modal" type="button">
+                                    <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                                </button> -->
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="modal-js-example" class="modal">
+    <div class="modal-background">
+
+        <div class="modal-content" style="margin: 1.5rem auto; width: 70%;">
+            <div class="box" style="margin: 0;">
+                <!-- <header class="card-header">
+                    <p class="card-header-title">
+                        <span class="icon"><i class="mdi mdi-plus-circle default"></i></span>
+                        Dodaj produkt
+                    </p>
+                </header> -->
+                <div class="card-content">
+                    <form action="#" method="POST">
+                        {{ document_add_form.csrf_token }}
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Typ dokumentu*</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="select">
+                                    {{ document_add_form.document_type_id()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Z magazynu*</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="select">
+                                    {{ document_add_form.warehouse_from_id()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Na magazyn*</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="select">
+                                    {{ document_add_form.warehouse_to_id()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Kontrahent*</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="select">
+                                    {{ document_add_form.trade_partner_id()}}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ document_add_form.add_document(class="button is-primary", type="submit")}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="help">*Pole wymagane</p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+    </div>
+</div>
+{% endblock %}

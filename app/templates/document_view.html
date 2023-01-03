@@ -1,0 +1,53 @@
+{% extends "base.html" %}{% block title %} Catalogue {% endblock %}
+{% block content %}
+<div class="card has-table">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-clipboard-list"></i></span>
+            Dokument nr {{ document.number }}
+        </p>
+        <div class="card-header-icon">
+            <button class="button is-primary js-modal-trigger" data-target="modal-js-example">
+                <span class="icon"><i class="mdi mdi-plus-box is-size-4"></i></span>
+            </button>
+        </div>
+    </header>
+</div>
+<div class="card-content">
+    <div class="b-table has-pagination">
+        <div class="table-wrapper">
+            <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Kod magazynowy</th>
+                        <th>Ilość w zgrzewce</th>
+                        <th>Czas palenia</th>
+                        <th>Ilość</th>
+                        <th>Cena</th>
+                        <!-- <th></th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in document.items %}
+                    <tr>
+                        <td data-label="Kod magazynowy">{{ item.catalogue.stock_code }}</td>
+                        <td data-label="Ilość w zgrzewce">{{ item.catalogue.bulk_pack_capacity }}</td>
+                        <td data-label="Czas palenia">{{ item.catalogue.burning_time }}</td>
+                        <td data-label="Ilość">{{ item.quantity }}</td>
+                        <td data-label="Cena">{{ item.price }}</td>
+                        <!-- <td class="is-actions-cell">
+                            <div class="buttons is-right">
+                                <button data-document-id="{{ document.id }}"
+                                    class="button is-small is-primary card-header-icon card-toggle" type="button">
+                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                </button>
+                            </div>
+                        </td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends "base.html" %}{% block title %} Login {% endblock %}
+{% block content %}
+<!-- <section class="section is-title-bar">
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <ul>
+          <li>Admin</li>
+          <li>Profile</li>
+        </ul>
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item">
+        <div class="buttons is-right">
+          <a href="https://github.com/vikdiesel/admin-one-bulma-dashboard" target="_blank" class="button is-primary">
+            <span class="icon"><i class="mdi mdi-github-circle"></i></span>
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!-- <section class="hero is-hero-bar">
+  <div class="hero-body">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">
+            Profil
+          </h1>
+        </div>
+      </div>
+      <div class="level-right" style="display: none;">
+        <div class="level-item"></div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<section class="section is-main-section">
+  <div class="tile is-ancestor">
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-account default"></i></span>
+            Profil
+          </p>
+        </header>
+        <div class="card-content">
+          <div class="is-user-avatar image has-max-width is-aligned-center">
+            <img src="https://avatars.dicebear.com/v2/initials/{{current_user.name}}-{{current_user.surname}}.svg"
+              alt={{current_user.name}}>
+          </div>
+          <hr>
+          <div class="field">
+            <label class="label">Imię</label>
+            <div class="control is-clearfix">
+              <input type="text" readonly value="{{current_user.name}}" class="input is-static">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Nazwisko</label>
+            <div class="control is-clearfix">
+              <input type="text" readonly value="{{current_user.surname}}" class="input is-static">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Numer telefonu</label>
+            <div class="control is-clearfix">
+              <input type="text" readonly
+                value="+48 {{current_user.phone_number[:3]}} {{current_user.phone_number[3:6]}} {{current_user.phone_number[6:]}}"
+                class="input is-static">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Adres e-mail</label>
+            <div class="control is-clearfix">
+              <input type="text" readonly value="{{current_user.email_address}}" class="input is-static">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-account-circle default"></i></span>
+            Edytuj profil
+          </p>
+        </header>
+        <div class="card-content">
+          <form action="#" method="POST">
+            {{ data_form.csrf_token }}
+            <hr>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Imię*</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  {{ data_form.name(class="input", value=current_user.name)}}
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Nazwisko</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  {{ data_form.surname(class="input", value=current_user.surname) }}
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Numer telefonu</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="field is-expanded">
+                    <div class="field has-addons">
+                      <p class="control">
+                        <a class="button is-static">
+                          +48
+                        </a>
+                      </p>
+                      <p class="control is-expanded">
+                        {{ data_form.phone_number(class="input", value=current_user.phone_number)}}
+                      </p>
+                    </div>
+                  </div>
+                  <!-- {{ data_form.phone_number(class="input", value=current_user.phone_number)}} -->
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <p class="help">*Pole wymagane</p>
+                </div>
+              </div>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+            {% if "-data" in message %}
+            <div class="notification is-{{category}} is-light" role="alert">
+              <button class="delete"></button>
+              {{message.replace("-data", "")}}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endwith %}
+            <hr>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal"></div>
+              <div class="field-body">
+                <div class="field">
+                  {{ data_form.save(class="button is-primary", type="submit")}}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-lock default"></i></span>
+        Zmień hasło
+      </p>
+    </header>
+    <div class="card-content">
+      <form action="#" method="POST">
+        {{ password_form.csrf_token }}
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Obecne hasło*</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              {{ password_form.current_password(class="input")}}
+              <p class="help">Obecne hasło</p>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Nowe hasło*</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              {{ password_form.new_password(class="input")}}
+              <p class="help">Nowe hasło</p>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">Potwierdź nowe hasło*</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              {{ password_form.repeated_new_password(class="input")}}
+              <p class="help">Podaj nowe hasło jeszcze raz</p>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-body">
+            <div class="field">
+              <p class="help">*Pole wymagane</p>
+            </div>
+          </div>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        {% if "-password" in message %}
+        <div class="notification is-{{category}} is-light" role="alert">
+          <button class="delete"></button>
+          {{message.replace("-password", "")}}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endwith %}
+        <hr>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal"></div>
+          <div class="field-body">
+            <div class="field">
+              {{ password_form.change_password(class="button is-primary", type="submit")}}
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

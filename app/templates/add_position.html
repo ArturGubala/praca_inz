@@ -1,0 +1,181 @@
+{% extends "base.html" %}{% block title %} Catalogue {% endblock %}
+{% block content %}
+<!-- <section class="section is-title-bar">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <ul>
+                    <li>Admin</li>
+                    <li>Dodaj pozycje</li>
+                </ul>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <div class="buttons is-right">
+                    <a href="https://github.com/vikdiesel/admin-one-bulma-dashboard" target="_blank"
+                        class="button is-primary">
+                        <span class="icon"><i class="mdi mdi-github-circle"></i></span>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<div class="card">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-plus-circle default"></i></span>
+            Dodaj pozycję
+        </p>
+    </header>
+    <div class="card-content">
+        <form action="#" method="POST">
+            {{ document_position_add_form.csrf_token }}
+            <div class="field is-inline-block-desktop">
+                <div class="field-label is-normal">
+                    <label class="label">Towar</label>
+                </div>
+                <div class="field-body" style="display: block;">
+                    <div class="select">
+                        {{ document_position_add_form.catalogue_id()}}
+                        <!-- <p class="help">Required. Your current password</p> -->
+                    </div>
+                </div>
+            </div>
+            <div class="field is-inline-block-desktop">
+                <div class="field-label is-normal">
+                    <label class="label">Ilość</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        {{ document_position_add_form.quantity(class="input")}}
+                        <!-- <p class="help">Required. New password</p> -->
+                    </div>
+                </div>
+            </div>
+            <div class="field is-inline-block-desktop">
+                <div class="field-label is-normal">
+                    <label class="label">Cena</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        {{ document_position_add_form.price(class="input")}}
+                        <!-- <p class="help">Required. New password one more time</p> -->
+                    </div>
+                </div>
+            </div>
+            <div class="field is-inline-block-desktop">
+                <div class="field-label is-normal"></div>
+                <div class="field-body">
+                    <div class="field">
+                        {{ document_position_add_form.add_document_position(class="button is-primary", type="submit")}}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+<div class="notification is-{{category}} is-light" role="alert">
+    <span>{{ message }}</span>
+    <button class="delete"></button>
+</div>
+{% endfor %}
+{% endwith %}
+<div class="card has-table">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-clipboard-list"></i></span>
+            Dokument
+        </p>
+        <div class="card-header-icon">
+            <form action="#" method="POST">
+
+                {{ confirm_cancel_document_form.csrf_token }}
+                <!-- <button class="button is-primary card-header-icon card-toggle" type="button">
+                    <span>Zatwierdź</span>
+                    <span class="icon"><i class="mdi mdi-check is-size-5"></i></span>
+                </button> -->
+                <div class="field is-inline-block-desktop">
+                    <div class="field-label is-normal"></div>
+                    <div class="field-body">
+                        <div class="field">
+                            {{ confirm_cancel_document_form.confirm_document(class="button is-primary", type="submit")}}
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-inline-block-desktop">
+                    <div class="field-label is-normal"></div>
+                    <div class="field-body">
+                        <div class="field">
+                            {{ confirm_cancel_document_form.cancel_document(class="button is-danger", type="submit")}}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </header>
+    {% if session %}
+    <div class="card-content" style="padding: .5em .75em;">
+        <p>Typ dokumentu:
+            <span class="has-text-weight-semibold">
+                {{session['document'].get('document_type_id').get('label')}}
+            </span>
+        </p>
+        <p>Z magazynu:
+            <span class="has-text-weight-semibold">
+                {{session['document'].get('warehouse_from_id').get('label')}}
+            </span>
+            Na magazyn:
+            <span class="has-text-weight-semibold">
+                {{session['document'].get('warehouse_to_id').get('label')}}
+            </span>
+        </p>
+        <p>Kontrahent:
+            <span class="has-text-weight-semibold">
+                {{session['document'].get('trade_partner_id').get('label')}}
+            </span>
+        </p>
+        <!-- {{ session['document'].trade_partner_id }}
+        {{ session['document'].warehouse_from_id }}
+        {{ session['document'].warehouse_to_id }} -->
+    </div>
+    <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-clipboard-list"></i></span>
+        Pozycje
+    </p>
+    {% if 'positions' in session %}
+    <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Ilość</th>
+                <th>Cena</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for position in session['positions'] %}
+            <tr>
+                <td data-label="Symbol">{{ position.get('catalogue_id').get('label')}}</td>
+                <td data-label="Symbol">{{ position.get('quantity').get('value')}}</td>
+                <td data-label="Symbol">{{ position.get('price').get('value') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="container">
+        <div class="columns has-text-centered">
+            <div class="column">
+                <p>Nie dodano jeszcze żadnych pozycji do dokumentu</p>
+                <span class="icon"><i class="mdi mdi-emoticon-sad"></i></span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
