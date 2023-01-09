@@ -141,6 +141,37 @@ class Catalogue(db.Model):
         self.diameter = diameter
 
 
+class Edition(db.Model):
+    __tablename__ = "edition"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(length=100), nullable=False, unique=True)
+
+    def __init__(self, name: str):
+        self.name = name
+
+
+class Language(db.Model):
+    __tablename__ = "language"
+
+    id = db.Column(db.Integer, primary_key=True)
+    code_two_char = db.Column(db.String(length=2), nullable=False, unique=True)
+    country_name = db.Column(db.String(length=100), nullable=False,
+                             unique=True)
+
+    def __init__(self, code_two_char: str, full_country_name: str):
+        self.code_two_char = code_two_char
+        self.full_country_name = full_country_name
+
+
+class Platform(db.Model):
+    __tablename__ = "platform"
+
+    id = db.Column(db.Integer, primary_key=True)
+    alias = db.Column(db.String(length=10), unique=True)
+    name = db.Column(db.String(length=50), unique=True)
+
+
 class Warehouse(db.Model):
     __tablename__ = "warehouse"
 
