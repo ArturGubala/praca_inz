@@ -74,7 +74,7 @@ class CatalogueAddForm(FlaskForm):
 class DocumentAddForm(FlaskForm):
     document_type_id = SelectField(coerce=int)
     warehouse_from_id = SelectField(coerce=int)
-    warehouse_to_id = SelectField(coerce=int)
+    # warehouse_to_id = SelectField(coerce=int)
     trade_partner_id = SelectField(coerce=int)
     add_document = SubmitField(label="Dodaj")
 

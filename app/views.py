@@ -259,9 +259,9 @@ class DocumentsView(MethodView):
         form.warehouse_from_id.choices = [
             (warehouse.id, warehouse.name) for warehouse in warehouses
         ]
-        form.warehouse_to_id.choices = [
-            (warehouse.id, warehouse.name) for warehouse in warehouses
-        ]
+        # form.warehouse_to_id.choices = [
+        #     (warehouse.id, warehouse.name) for warehouse in warehouses
+        # ]
         form.trade_partner_id.choices = [
             (trade_partner.id, trade_partner.name) for trade_partner in trade_partners
         ]

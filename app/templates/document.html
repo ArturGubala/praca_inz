@@ -68,8 +68,8 @@
                         <th>Numer</th>
                         <th>Data dodania</th>
                         <th class="is-hidden-mobile">Typ dokumentu</th>
-                        <th class="is-hidden-mobile">Z magazynu</th>
-                        <th class="is-hidden-mobile">Na magazyn</th>
+                        <th class="is-hidden-mobile">Miejsce sprzedaży</th>
+                        <!-- <th class="is-hidden-mobile">Na magazyn</th> -->
                         <th></th>
                     </tr>
                 </thead>
@@ -91,7 +91,7 @@
                         <td data-label="Data dodania">{{ document.date_added.strftime("%d-%m-%Y") }}</td>
                         <td class="is-hidden-mobile" data-label="Typ dokumentu">{{ document.document_type.name }}</td>
                         <td class="is-hidden-mobile" data-label="Z magazynu">{{ document.warehouse_from.code }}</td>
-                        <td class="is-hidden-mobile" data-label="Na magazyn">{{ document.warehouse_to.code }}</td>
+                        <!-- <td class="is-hidden-mobile" data-label="Na magazyn">{{ document.warehouse_to.code }}</td> -->
                         <td class="is-actions-cell">
                             <div class="buttons is-right">
                                 <button data-document-id="{{ document.id }}"
@@ -143,16 +143,6 @@
                             <div class="field-body">
                                 <div class="select">
                                     {{ document_add_form.warehouse_from_id()}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field is-horizontal">
-                            <div class="field-label is-normal">
-                                <label class="label">Na magazyn*</label>
-                            </div>
-                            <div class="field-body">
-                                <div class="select">
-                                    {{ document_add_form.warehouse_to_id()}}
                                 </div>
                             </div>
                         </div>
