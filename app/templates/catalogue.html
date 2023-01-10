@@ -81,7 +81,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item, type, bulk_pack, producer, measurement_unit in catalogue %}
+                        {% for item, type, bulk_pack, producer, measurement_unit, edition, language, platform in
+                        catalogue %}
                         <tr>
                             <td class="is-checkbox-cell">
                                 <label class="b-checkbox checkbox">
@@ -95,7 +96,7 @@
                                         class="is-rounded">
                                 </div>
                             </td>
-                            <td data-label="Nazwa">{{ item.stock_code }}</td>
+                            <td data-label="Nazwa">{{ item.name }}</td>
                             <td data-label="Ostatnia cena zakupu">{{ item.last_purchase_price }}</td>
                             <td data-label="Jm">{{ measurement_unit.abbreviation }}</td>
                             <td class="is-hidden-mobile" data-label="Rodzaj">{{ type.name }}</td>
@@ -168,20 +169,20 @@
                                         <p class="heading">Cechy</p>
                                         <ul class="is-size-7">
                                             <li>
-                                                Wysokość:
-                                                <span class="has-text-weight-semibold">{{ item.height }}</span>
+                                                Wydanie:
+                                                <span class="has-text-weight-semibold">{{ edition.name }}</span>
                                             </li>
                                             <li>
-                                                Szerokość:
-                                                <span class="has-text-weight-semibold">{{ item.width }}</span>
+                                                Język:
+                                                <span class="has-text-weight-semibold">
+                                                    {{ language.country_name }} ({{language.code_two_char }})
+                                                </span>
                                             </li>
                                             <li>
-                                                Średnica:
-                                                <span class="has-text-weight-semibold">{{ item.diameter }}</span>
-                                            </li>
-                                            <li>
-                                                Czas palenia (h):
-                                                <span class="has-text-weight-semibold">{{ item.burning_time }}</span>
+                                                Platforma:
+                                                <span class="has-text-weight-semibold">
+                                                    {{ platform.name }} ({{ platform.alias }})
+                                                </span>
                                             </li>
                                         </ul>
                                     </div>

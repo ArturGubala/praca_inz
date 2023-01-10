@@ -9,7 +9,7 @@ from datetime import datetime
 
 from . import db
 from . import login_manager, bcrypt
-from .models import AppUser, Catalogue, CatalogueType, BulkPackType, Producer, MeasurementUnit, Document, DocumentType, Warehouse, TradePartner, DocumentNumberParts
+from .models import AppUser, Catalogue, CatalogueType, BulkPackType, Producer, MeasurementUnit, Document, DocumentType, Warehouse, TradePartner, DocumentNumberParts, Edition, Language, Platform
 from .forms import LoginForm, UpdateUserInformationForm, ChangePasswordForm, CatalogueAddForm, DocumentAddForm, DocumentPositionAddForm, ConfirmCancelDocumentForm
 from .serializers import CatalogueSchema, DocumentSchema, ItemSchema, DocumentNumberPartsSchema
 from .error_message import MessageLevel, Message
@@ -122,11 +122,14 @@ class CatalogueView(MethodView):
         ]
 
     def __get_catalogue_data(self) -> List[tuple]:
-        return db.session.query(Catalogue, CatalogueType, BulkPackType, Producer, MeasurementUnit) \
+        return db.session.query(Catalogue, CatalogueType, BulkPackType, Producer, MeasurementUnit, Edition, Language, Platform) \
             .join(CatalogueType, CatalogueType.id == Catalogue.catalogue_type_id) \
             .join(BulkPackType, BulkPackType.id == Catalogue.bulk_pack_id) \
             .join(Producer, Producer.id == Catalogue.producer_id) \
             .join(MeasurementUnit, MeasurementUnit.id == Catalogue.measurement_unit_id) \
+            .join(Edition, Edition.id == Catalogue.edition_id) \
+            .join(Language, Language.id == Catalogue.language_id) \
+            .join(Platform, Platform.id == Catalogue.platform_id) \
             .all()
 
     def __remove_unnecessary_entries(self, form_data: CatalogueAddForm, entries: List[str]) -> Catalogue:
