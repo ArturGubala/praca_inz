@@ -69,7 +69,6 @@
                         <th>Data dodania</th>
                         <th class="is-hidden-mobile">Typ dokumentu</th>
                         <th class="is-hidden-mobile">Miejsce sprzedaży</th>
-                        <!-- <th class="is-hidden-mobile">Na magazyn</th> -->
                         <th></th>
                     </tr>
                 </thead>
@@ -91,7 +90,6 @@
                         <td data-label="Data dodania">{{ document.date_added.strftime("%d-%m-%Y") }}</td>
                         <td class="is-hidden-mobile" data-label="Typ dokumentu">{{ document.document_type.name }}</td>
                         <td class="is-hidden-mobile" data-label="Z magazynu">{{ document.warehouse_from.code }}</td>
-                        <!-- <td class="is-hidden-mobile" data-label="Na magazyn">{{ document.warehouse_to.code }}</td> -->
                         <td class="is-actions-cell">
                             <div class="buttons is-right">
                                 <button data-document-id="{{ document.id }}"

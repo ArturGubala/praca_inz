@@ -73,7 +73,6 @@ class DocumentSchema(marshmallow.Schema):
     document_type_id = fields.Int()
     app_user_id = fields.Int()
     warehouse_from_id = fields.Int()
-    warehouse_to_id = fields.Int()
     trade_partner_id = fields.Int()
     number = fields.Str()
     total = fields.Decimal()

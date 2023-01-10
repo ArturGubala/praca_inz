@@ -270,8 +270,6 @@ class Document(db.Model):
         "app_user.id"), nullable=False)
     warehouse_from_id = db.Column(db.Integer, ForeignKey("warehouse.id"),
                                   nullable=False)
-    warehouse_to_id = db.Column(db.Integer, ForeignKey("warehouse.id"),
-                                nullable=True)
     trade_partner_id = db.Column(db.Integer, ForeignKey("trade_partner.id"),
                                  nullable=False)
     number = db.Column(db.String(length=50), nullable=False, unique=True)
@@ -284,18 +282,15 @@ class Document(db.Model):
         "DocumentType", backref="document_type", uselist=False, foreign_keys=[document_type_id])
     warehouse_from = db.relationship(
         "Warehouse", backref="warehouse_from", uselist=False, foreign_keys=[warehouse_from_id])
-    warehouse_to = db.relationship(
-        "Warehouse", backref="warehouse_to", uselist=False, foreign_keys=[warehouse_to_id])
     trade_partner = db.relationship(
         "TradePartner", backref="trade_partner", uselist=False, foreign_keys=[trade_partner_id])
     items = db.relationship("Item", back_populates="document")
 
-    def __init__(self, document_type_id: int, app_user_id: int, warehouse_from_id: int,  warehouse_to_id: int,
-                 trade_partner_id: int, number: str, date_added: datetime, modification_date: datetime, total: float) -> None:
+    def __init__(self, document_type_id: int, app_user_id: int, warehouse_from_id: int, trade_partner_id: int,
+                 number: str, date_added: datetime, modification_date: datetime, total: float) -> None:
         self.document_type_id = document_type_id
         self.app_user_id = app_user_id
         self.warehouse_from_id = warehouse_from_id
-        self.warehouse_to_id = warehouse_to_id
         self.trade_partner_id = trade_partner_id
         self.number = number
         self.date_added = date_added

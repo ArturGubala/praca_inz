@@ -107,6 +107,9 @@ class CatalogueView(MethodView):
         catalogue_types = CatalogueType.query.all()
         bulk_packs = BulkPackType.query.all()
         producers = Producer.query.all()
+        editions = Edition.query.all()
+        languages = Language.query.all()
+        platforms = Platform.query.all()
 
         form.measurement_unit_id.choices = [
             (measurement_unit.id, measurement_unit.name) for measurement_unit in measurement_units
@@ -119,6 +122,15 @@ class CatalogueView(MethodView):
         ]
         form.producer_id.choices = [
             (producer.id, producer.name) for producer in producers
+        ]
+        form.edition_id.choices = [
+            (edition.id, edition.name) for edition in editions
+        ]
+        form.language_id.choices = [
+            (language.id, language.code_two_char) for language in languages
+        ]
+        form.platform_id.choices = [
+            (platform.id, platform.name) for platform in platforms
         ]
 
     def __get_catalogue_data(self) -> List[tuple]:

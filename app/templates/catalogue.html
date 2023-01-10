@@ -81,8 +81,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item, type, bulk_pack, producer, measurement_unit, edition, language, platform in
-                        catalogue %}
+                        {% for item, type, bulk_pack, producer, measurement_unit, edition, language, platform
+                        in catalogue %}
                         <tr>
                             <td class="is-checkbox-cell">
                                 <label class="b-checkbox checkbox">
@@ -269,6 +269,37 @@
                         </div>
                         <div class="field is-horizontal">
                             <div class="field-label is-normal">
+                                <label class="label">Edycja*</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="select">
+                                    {{ catalogue_add_form.edition_id()}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Język*</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="select">
+                                    {{ catalogue_add_form.language_id()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Platforma*</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="select">
+                                    {{ catalogue_add_form.platform_id()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
                                 <label class="label">Symbol*</label>
                             </div>
                             <div class="field-body">
@@ -324,46 +355,6 @@
                             <div class="field-body">
                                 <div class="field">
                                     {{ catalogue_add_form.no_bulk_pack_on_palette(class="input")}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field is-horizontal">
-                            <div class="field-label is-normal">
-                                <label class="label">Czas palenia</label>
-                            </div>
-                            <div class="field-body">
-                                <div class="field">
-                                    {{ catalogue_add_form.burning_time(class="input")}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field is-horizontal">
-                            <div class="field-label is-normal">
-                                <label class="label">Wysokość</label>
-                            </div>
-                            <div class="field-body">
-                                <div class="field">
-                                    {{ catalogue_add_form.height(class="input")}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field is-horizontal">
-                            <div class="field-label is-normal">
-                                <label class="label">Szerokość</label>
-                            </div>
-                            <div class="field-body">
-                                <div class="field">
-                                    {{ catalogue_add_form.width(class="input")}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field is-horizontal">
-                            <div class="field-label is-normal">
-                                <label class="label">Śrdenica</label>
-                            </div>
-                            <div class="field-body">
-                                <div class="field">
-                                    {{ catalogue_add_form.diameter(class="input")}}
                                 </div>
                             </div>
                         </div>

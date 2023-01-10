@@ -54,6 +54,9 @@ class CatalogueAddForm(FlaskForm):
     catalogue_type_id = SelectField()
     bulk_pack_id = SelectField()
     producer_id = SelectField()
+    edition_id = SelectField()
+    language_id = SelectField()
+    platform_id = SelectField()
     stock_code = StringField(validators=[validators.InputRequired()])
     name = StringField(validators=[validators.Optional()],
                        filters=[lambda name: name or None])
@@ -64,10 +67,6 @@ class CatalogueAddForm(FlaskForm):
     bulk_pack_capacity = DecimalField(
         validators=[validators.Optional()], places=2)
     no_bulk_pack_on_palette = IntegerField(validators=[validators.Optional()])
-    burning_time = DecimalField(validators=[validators.Optional()], places=2)
-    height = DecimalField(validators=[validators.Optional()], places=2)
-    width = DecimalField(validators=[validators.Optional()], places=2)
-    diameter = DecimalField(validators=[validators.Optional()], places=2)
     add_product = SubmitField(label="Dodaj")
 
 
