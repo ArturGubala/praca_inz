@@ -165,23 +165,21 @@ class Catalogue(db.Model):
     no_bulk_pack_on_palette = db.Column(db.Integer)
 
     def __init__(self, measurement_unit_id: int, catalogue_type_id: int, bulk_pack_id: int,
-                 producer_id: int, stock_code: str, name: str, alias: str, last_purchase_price: float,
-                 bulk_pack_capacity: float, no_bulk_pack_on_palette: int, burning_time: float, height: float, width: float,
-                 diameter: float) -> None:
+                 producer_id: int, edition_id: int, language_id: int, platform_id: int, stock_code: str,
+                 name: str, alias: str, last_purchase_price: float, bulk_pack_capacity: float, no_bulk_pack_on_palette: int) -> None:
         self.measurement_unit_id = measurement_unit_id
         self.catalogue_type_id = catalogue_type_id
         self.bulk_pack_id = bulk_pack_id
         self.producer_id = producer_id
+        self.edition_id = edition_id
+        self.language_id = language_id
+        self.platform_id = platform_id
         self.stock_code = stock_code
         self.name = name
         self.alias = alias
         self.last_purchase_price = last_purchase_price
         self.bulk_pack_capacity = bulk_pack_capacity
         self.no_bulk_pack_on_palette = no_bulk_pack_on_palette
-        self.burning_time = burning_time
-        self.height = height
-        self.width = width
-        self.diameter = diameter
 
 
 class Warehouse(db.Model):
@@ -249,9 +247,6 @@ class TradePartner(db.Model):
     nip = db.Column(db.String(length=50))
     regon = db.Column(db.String(length=50))
 
-    # document = db.relationship("Document", backref="trade_partner",
-    #                            uselist=False)
-
     def __init__(self, name: str, email_address: str, phone_number: str, street: str, street_number: str,
                  city: str, post_code: str, nip: str, regon: str) -> None:
         self.name = name
@@ -276,7 +271,7 @@ class Document(db.Model):
     warehouse_from_id = db.Column(db.Integer, ForeignKey("warehouse.id"),
                                   nullable=False)
     warehouse_to_id = db.Column(db.Integer, ForeignKey("warehouse.id"),
-                                nullable=False)
+                                nullable=True)
     trade_partner_id = db.Column(db.Integer, ForeignKey("trade_partner.id"),
                                  nullable=False)
     number = db.Column(db.String(length=50), nullable=False, unique=True)
