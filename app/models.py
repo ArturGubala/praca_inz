@@ -98,6 +98,47 @@ class MeasurementUnit(db.Model):
         self.abbreviation = abbreviation
 
 
+class Edition(db.Model):
+    __tablename__ = "edition"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(length=100), nullable=False, unique=True)
+
+    catalogue = db.relationship("Catalogue", backref="edition", uselist=False)
+
+    def __init__(self, name: str):
+        self.name = name
+
+
+class Language(db.Model):
+    __tablename__ = "language"
+
+    id = db.Column(db.Integer, primary_key=True)
+    code_two_char = db.Column(db.String(length=2), nullable=False, unique=True)
+    country_name = db.Column(db.String(length=100), nullable=False,
+                             unique=True)
+
+    catalogue = db.relationship("Catalogue", backref="language", uselist=False)
+
+    def __init__(self, code_two_char: str, full_country_name: str):
+        self.code_two_char = code_two_char
+        self.full_country_name = full_country_name
+
+
+class Platform(db.Model):
+    __tablename__ = "platform"
+
+    id = db.Column(db.Integer, primary_key=True)
+    alias = db.Column(db.String(length=10), unique=True)
+    name = db.Column(db.String(length=50), unique=True)
+
+    catalogue = db.relationship("Catalogue", backref="platform", uselist=False)
+
+    def __init__(self, alias: str, name: str):
+        self.alias = alias
+        self.name = name
+
+
 class Catalogue(db.Model):
     __tablename__ = "catalogue"
 
@@ -110,16 +151,18 @@ class Catalogue(db.Model):
                              nullable=False)
     producer_id = db.Column(db.Integer, ForeignKey("producer.id"),
                             nullable=False)
+    edition_id = db.Column(db.Integer, ForeignKey("edition.id"),
+                           nullable=False)
+    language_id = db.Column(db.Integer, ForeignKey("language.id"),
+                            nullable=False)
+    platform_id = db.Column(db.Integer, ForeignKey("platform.id"),
+                            nullable=False)
     stock_code = db.Column(db.String(length=50), nullable=False, unique=True)
     name = db.Column(db.String(length=200), unique=True)
     alias = db.Column(db.String(length=50), unique=True)
     last_purchase_price = db.Column(db.Numeric(18, 2))
     bulk_pack_capacity = db.Column(db.Numeric(18, 2))
     no_bulk_pack_on_palette = db.Column(db.Integer)
-    burning_time = db.Column(db.Numeric(18, 2))
-    height = db.Column(db.Numeric(18, 2))
-    width = db.Column(db.Numeric(18, 2))
-    diameter = db.Column(db.Numeric(18, 2))
 
     def __init__(self, measurement_unit_id: int, catalogue_type_id: int, bulk_pack_id: int,
                  producer_id: int, stock_code: str, name: str, alias: str, last_purchase_price: float,
@@ -139,37 +182,6 @@ class Catalogue(db.Model):
         self.height = height
         self.width = width
         self.diameter = diameter
-
-
-class Edition(db.Model):
-    __tablename__ = "edition"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(length=100), nullable=False, unique=True)
-
-    def __init__(self, name: str):
-        self.name = name
-
-
-class Language(db.Model):
-    __tablename__ = "language"
-
-    id = db.Column(db.Integer, primary_key=True)
-    code_two_char = db.Column(db.String(length=2), nullable=False, unique=True)
-    country_name = db.Column(db.String(length=100), nullable=False,
-                             unique=True)
-
-    def __init__(self, code_two_char: str, full_country_name: str):
-        self.code_two_char = code_two_char
-        self.full_country_name = full_country_name
-
-
-class Platform(db.Model):
-    __tablename__ = "platform"
-
-    id = db.Column(db.Integer, primary_key=True)
-    alias = db.Column(db.String(length=10), unique=True)
-    name = db.Column(db.String(length=50), unique=True)
 
 
 class Warehouse(db.Model):
