@@ -65,12 +65,12 @@
                 <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
                     <thead>
                         <tr>
-                            <th class="is-checkbox-cell">
+                            <!-- <th class="is-checkbox-cell">
                                 <label class="b-checkbox checkbox">
                                     <input type="checkbox" value="false">
                                     <span class="check"></span>
                                 </label>
-                            </th>
+                            </th> -->
                             <th></th>
                             <th>Nazwa</th>
                             <th>Ostatnia cena zakupu</th>
@@ -84,15 +84,15 @@
                         {% for item, type, bulk_pack, producer, measurement_unit, edition, language, platform
                         in catalogue %}
                         <tr>
-                            <td class="is-checkbox-cell">
+                            <!-- <td class="is-checkbox-cell">
                                 <label class="b-checkbox checkbox">
                                     <input type="checkbox" value="false">
                                     <span class="check"></span>
                                 </label>
-                            </td>
+                            </td> -->
                             <td class="is-image-cell">
                                 <div class="image">
-                                    <img src="https://avatars.dicebear.com/v2/initials/{{ item.stock_code }}.svg"
+                                    <img src="https://avatars.dicebear.com/v2/initials/{{ item.name }}.svg"
                                         class="is-rounded">
                                 </div>
                             </td>
