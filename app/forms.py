@@ -1,4 +1,4 @@
-from wtforms import StringField, PasswordField, validators, SubmitField, DecimalField, IntegerField, SelectField
+from wtforms import StringField, PasswordField, validators, SubmitField, DecimalField, IntegerField, SelectField, EmailField
 from flask_wtf import FlaskForm
 
 
@@ -19,7 +19,7 @@ class UpdateUserInformationForm(FlaskForm):
     surname = StringField(
         validators=[validators.Optional(),
                     validators.Length(min=3, max=50,
-                                      message="Imie musi zawierać od %(min)d do %(max)d znaków."),
+                                      message="Nazwisko musi zawierać od %(min)d do %(max)d znaków."),
                     validators.Regexp(regex="^[-a-zA-Z0-9żźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", message='Nazwisko może składać się tylko ze znaków alfabetu')]
     )
     phone_number = StringField(
@@ -88,3 +88,37 @@ class DocumentPositionAddForm(FlaskForm):
 class ConfirmCancelDocumentForm(FlaskForm):
     confirm_document = SubmitField(label="Zatwierdź")
     cancel_document = SubmitField(label="Anuluj")
+
+
+class TradePartnerAddForm(FlaskForm):
+    name = StringField(validators=[validators.Length(min=3, max=50,
+                                                     message="Nazwa musi zawierać od %(min)d do %(max)d znaków.")])
+    email_address = EmailField(validators=[validators.Regexp(regex="([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)", message="Podaj poprawny adres email.")],
+                               filters=[lambda alias: alias or None])
+    phone_number = StringField(
+        validators=[validators.Optional(),
+                    validators.Length(min=9, max=9,
+                                      message="Telefon musi składać się z %(max)d cyfr"),
+                    validators.Regexp(regex="([0-9]{9})", message='Podaj 9 cyfrowy numer telefonu bez dodatkowych znaków')])
+    street = StringField(validators=[validators.Length(min=3, max=50,
+                                                       message="Ulica musi zawierać od %(min)d do %(max)d znaków.")],
+                         filters=[lambda alias: alias or None])
+    street_number = StringField(validators=[validators.Length(min=1, max=50,
+                                                              message="Numer ulicy / domu musi zawierać od %(min)d do %(max)d znaków.")],
+                                filters=[lambda alias: alias or None])
+    city = StringField(validators=[validators.Optional()],
+                       filters=[lambda name: name or None])
+    post_code = StringField(validators=[validators.Optional(),
+                                        validators.Regexp(regex="([0-9]{2}-[0-9]{3})", message='Podaj kod pocztowy w postaci XX-XXX.')],
+                            filters=[lambda name: name or None])
+    nip = StringField(
+        validators=[validators.Optional(),
+                    validators.Length(min=10, max=10,
+                                      message="NIP musi składać się z %(max)d cyfr"),
+                    validators.Regexp(regex="([0-9]{9})", message='Podaj 10 cyfrowy numer NIP bez dodatkowych znaków')])
+    regon = StringField(
+        validators=[validators.Optional(),
+                    validators.Length(min=9, max=14,
+                                      message="REGON musi składać się z %(min)d lub %(max)d cyfr"),
+                    validators.Regexp(regex="(^([0-9]{10}|[0-9]{14})$)", message='Podaj 9 lub 14 cyfrowy numer REGON bez dodatkowych znaków')])
+    add_trade_partner = SubmitField(label="Dodaj")

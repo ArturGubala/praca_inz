@@ -4,7 +4,7 @@ from marshmallow import post_load
 from . import marshmallow
 from .models import (
     AppUser, Producer, BulkPackType, Catalogue,
-    DocumentType, Document, Item, DocumentNumberParts
+    DocumentType, Document, Item, DocumentNumberParts, TradePartner
 )
 
 
@@ -104,3 +104,19 @@ class DocumentNumberPartsSchema(marshmallow.Schema):
     @post_load
     def make_document_numers_parts(self, data, **kwargs) -> dict:
         return DocumentNumberParts(**data)
+
+
+class TradePartnerSchema(marshmallow.Schema):
+    name = fields.Str()
+    email_address = fields.Str()
+    phone_number = fields.Str()
+    street = fields.Str()
+    street_number = fields.Str()
+    post_code = fields.Str()
+    nip = fields.Str()
+    regon = fields.Str()
+    add_trade_partner = fields.Str()
+
+    @post_load
+    def make_trade_partner(self, data, **kwargs) -> dict:
+        return TradePartner(**data)

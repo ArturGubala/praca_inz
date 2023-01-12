@@ -91,7 +91,8 @@
                             </td>
                             <td data-label="Nazwa">{{ trade_partner.name }}</td>
                             <td data-label="Adres e-mail">{{ trade_partner.email_address }}</td>
-                            <td data-label="Numer telefonu">{{ trade_partner.phone_number }}</td>
+                            <td data-label="Numer telefonu">+48 {{trade_partner.phone_number[:3]}}
+                                {{trade_partner.phone_number[3:6]}} {{trade_partner.phone_number[6:]}}</td>
                             <td data-label="Kod pocztowy">{{ trade_partner.post_code }}</td>
                             <td data-label="Miejscowość">{{ trade_partner.city }}</td>
                             <td class="is-hidden-mobile" data-label="NIP">{{ trade_partner.nip }}</td>
@@ -102,5 +103,135 @@
         </div>
     </div>
 
+</div>
+<div id="modal-js-example" class="modal">
+    <div class="modal-background">
+
+        <div class="modal-content" style="margin: 1.5rem auto; width: 70%;">
+            <div class="box" style="margin: 0;">
+                <!-- <header class="card-header">
+                    <p class="card-header-title">
+                        <span class="icon"><i class="mdi mdi-plus-circle default"></i></span>
+                        Dodaj produkt
+                    </p>
+                </header> -->
+                <div class="card-content">
+                    <form action="#" method="POST">
+                        {{ trade_partner_add_form.csrf_token }}
+
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Nazwa*</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.name()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Adres e-mail</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.email_address()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Numer telefonu</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.phone_number()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Ulica</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.street()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Numer domu</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.street_number()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Miasto</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.city()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Kod pocztowy</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.post_code()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">NIP</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.nip()}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">REGON</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.regon()}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    {{ trade_partner_add_form.add_trade_partner(class="button is-primary",
+                                    type="submit")}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="help">*Pole wymagane</p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+    </div>
 </div>
 {% endblock %}
