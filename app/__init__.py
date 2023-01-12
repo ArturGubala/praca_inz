@@ -30,7 +30,8 @@ def create_app():
         ProfileView,
         DocumentsView,
         AddDocumentPositionView,
-        DocumentView
+        DocumentView,
+        TradePartnerView
     )
 
     app.add_url_rule("/", view_func=LoginView.as_view("login_view"))
@@ -47,5 +48,9 @@ def create_app():
                      view_func=AddDocumentPositionView.as_view("add_document_position_view"))
     app.add_url_rule("/dokument/<int:document_id>",
                      view_func=DocumentView.as_view("document_view"))
+    app.add_url_rule("/kontrahenci",
+                     view_func=TradePartnerView.as_view("trade_partners_view"))
+    # app.add_url_rule('/katalog/product/<int:id_product>',
+    #                  view_func=DeleteProductFromCatalogueView.as_view("delete_product_form_catalogue"))
 
     return app

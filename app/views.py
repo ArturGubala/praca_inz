@@ -189,6 +189,18 @@ class CatalogueView(MethodView):
         return render_template(self.template_name, current_user=current_user, catalogue=catalogue, catalogue_add_form=catalogue_add_form)
 
 
+# class DeleteProductFromCatalogueView(MethodView):
+#     methods = ["POST"]
+
+#     def post(self, id_product: int):
+#         # print(id_product, flush=True)
+#         catalogue_product_to_del = Catalogue.query.filter_by(id=id_product)
+#         catalogue_product_to_del.delete()
+#         db.session.commit()
+
+#         return redirect("/katalog")
+
+
 class ProfileView(MethodView):
     methods = ["GET", "POST"]
 
@@ -527,3 +539,90 @@ class DocumentView(MethodView):
         document = Document.query.get(document_id)
 
         return render_template(self.template_name, document=document)
+
+
+class TradePartnerView(MethodView):
+    methods = ["GET", "POST"]
+
+    def __init__(self) -> None:
+        self.template_name = "trade-partner.html"
+
+    @login_manager.unauthorized_handler
+    def unauthorized_callback():
+        return redirect('/?next=' + request.path)
+
+    def __set_select_field_choices(self, form: CatalogueAddForm) -> None:
+        measurement_units = MeasurementUnit.query.all()
+        catalogue_types = CatalogueType.query.all()
+        bulk_packs = BulkPackType.query.all()
+        producers = Producer.query.all()
+        editions = Edition.query.all()
+        languages = Language.query.all()
+        platforms = Platform.query.all()
+
+        form.measurement_unit_id.choices = [
+            (measurement_unit.id, measurement_unit.name) for measurement_unit in measurement_units
+        ]
+        form.catalogue_type_id.choices = [
+            (catalogue_type.id, catalogue_type.name) for catalogue_type in catalogue_types
+        ]
+        form.bulk_pack_id.choices = [
+            (bulk_pack.id, bulk_pack.name) for bulk_pack in bulk_packs
+        ]
+        form.producer_id.choices = [
+            (producer.id, producer.name) for producer in producers
+        ]
+        form.edition_id.choices = [
+            (edition.id, edition.name) for edition in editions
+        ]
+        form.language_id.choices = [
+            (language.id, language.code_two_char) for language in languages
+        ]
+        form.platform_id.choices = [
+            (platform.id, platform.name) for platform in platforms
+        ]
+
+    def __get_trade_partner_data(self) -> List[tuple]:
+        return TradePartner.query.all()
+
+    def __remove_unnecessary_entries(self, form_data: CatalogueAddForm, entries: List[str]) -> Catalogue:
+        for entry in entries:
+            form_data.pop(entry, None)
+
+        return catalogue_schema.make_catalogue(form_data)
+
+    @login_required
+    def get(self):
+        # catalogue_add_form = CatalogueAddForm()
+        # self.__set_select_field_choices(catalogue_add_form)
+        trade_partners = self.__get_trade_partner_data()
+
+        return render_template(self.template_name, current_user=current_user, trade_partners=trade_partners)
+
+    def post(self):
+        catalogue_add_form = CatalogueAddForm(request.form)
+        self.__set_select_field_choices(catalogue_add_form)
+
+        if catalogue_add_form.validate_on_submit():
+            catalogue_to_add = self.__remove_unnecessary_entries(
+                catalogue_add_form.data, ['add_product', 'csrf_token'])
+
+            db.session.add(catalogue_to_add)
+            try:
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+                Message.flash_message(f'Istnieje już produkt o symbolu "{catalogue_add_form.stock_code.data}"',
+                                      MessageLevel.WARNING)
+                catalogue = self.__get_catalogue_data()
+                return render_template(self.template_name, current_user=current_user, catalogue=catalogue, catalogue_add_form=catalogue_add_form)
+
+            Message.flash_message("Produkt został pomyślnie dodany",
+                                  MessageLevel.SUCCESS)
+        else:
+            error_message = Message.get_err_message(
+                catalogue_add_form.errors.values())
+            Message.flash_message(f'{error_message}', MessageLevel.WARNING)
+
+        catalogue = self.__get_catalogue_data()
+        return render_template(self.template_name, current_user=current_user, catalogue=catalogue, catalogue_add_form=catalogue_add_form)

@@ -1,0 +1,106 @@
+{% extends "base.html" %}{% block title %} Kontrahenci {% endblock %}
+{% block content %}
+<!-- <section class="section is-title-bar">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <ul>
+                    <li>Admin</li>
+                    <li>Katalog</li>
+                </ul>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <div class="buttons is-right">
+                    <a href="https://github.com/vikdiesel/admin-one-bulma-dashboard" target="_blank"
+                        class="button is-primary">
+                        <span class="icon"><i class="mdi mdi-github-circle"></i></span>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<section class="hero is-hero-bar">
+    <div class="hero-body">
+        <div class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <h1 class="title">
+                        Kontrahent
+                    </h1>
+                </div>
+            </div>
+            <div class="level-right" style="display: none;">
+                <div class="level-item"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="card has-table">
+    <header class="card-header">
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-tooltip-account"></i></span>
+            Kontrahenci
+        </p>
+        <div class="card-header-icon">
+            <button class="button is-primary js-modal-trigger" data-target="modal-js-example">
+                <span class="icon"><i class="mdi mdi-plus-box is-size-4"></i></span>
+            </button>
+        </div>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="notification is-{{category}} is-light" role="alert">
+        <span>{{ message }}</span>
+        <button class="delete"></button>
+    </div>
+    {% endfor %}
+    {% endwith %}
+    <div class="card-content">
+        <div class="b-table has-pagination">
+            <div class="table-wrapper">
+                <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <!-- <th class="is-checkbox-cell">
+                                <label class="b-checkbox checkbox">
+                                    <input type="checkbox" value="false">
+                                    <span class="check"></span>
+                                </label>
+                            </th> -->
+                            <th></th>
+                            <th>Nazwa</th>
+                            <th>Adres e-mail</th>
+                            <th>Numer telefonu</th>
+                            <th>Kod pocztowy</th>
+                            <th>Miejscowość</th>
+                            <th class="is-hidden-mobile">NIP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trade_partner in trade_partners %}
+                        <tr>
+                            <td class="is-image-cell">
+                                <div class="image">
+                                    <img src="https://avatars.dicebear.com/v2/initials/{{ trade_partner.name }}.svg"
+                                        class="is-rounded">
+                                </div>
+                            </td>
+                            <td data-label="Nazwa">{{ trade_partner.name }}</td>
+                            <td data-label="Adres e-mail">{{ trade_partner.email_address }}</td>
+                            <td data-label="Numer telefonu">{{ trade_partner.phone_number }}</td>
+                            <td data-label="Kod pocztowy">{{ trade_partner.post_code }}</td>
+                            <td data-label="Miejscowość">{{ trade_partner.city }}</td>
+                            <td class="is-hidden-mobile" data-label="NIP">{{ trade_partner.nip }}</td>
+                            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
