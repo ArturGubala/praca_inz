@@ -1,0 +1,132 @@
+psql -d kb_crm_db -U postgres
+
+insert into role (name) 
+values ('Admin');
+
+insert into app_user (role_id, password, name, surname, phone_number, email_address) 
+values (1, '$2a$12$emJT7NG.mMiYyhfJ2vqvBOW9i3VBS165vSzCw9bfOV0SBObVQwslq', 'Artur', 'Gubała', '123456789', 'gubala-artur@wp.pl');
+
+insert into catalogue_type (name) 
+values ('Gra konsolowa'), 
+       ('Gra komputerowa'), 
+       ('Kontroler'), 
+       ('Konsola');
+
+insert into producer (name) 
+values ('Sony'), ('Microsoft'), ('Nintendo'), ('Inny');
+
+insert into bulk_pack_type (name, abbreviation) 
+values ('Pudełko', 'pd'), 
+       ('Zgrzewka', 'zg'), 
+       ('Karton', 'kt'), 
+       ('Opakowanie', 'opk'), 
+       ('Kod do pobrania', 'kod');
+
+insert into measurement_unit (name, abbreviation) 
+values ('Sztuki', 'szt'), 
+       ('Zestaw', 'zst');
+
+insert into edition (name) 
+values ('Premierowe'), 
+       ('Limitowane'), 
+       ('Kolekcjonerskie'), 
+       ('Specjalne'), 
+       ('Deluxe'), 
+       ('Rozszerzone');
+
+insert into language (code_two_char, country_name) 
+values ('PL', 'polski'), 
+       ('EN', 'angielski'), 
+       ('JP', 'japoński');
+
+insert into platform (alias, name) 
+values ('PS4', 'Playstation 4'), 
+       ('PS5', 'Playstation 5'), 
+       ('XSS', 'Xbox Series S'), 
+       ('XSX', 'Xbox Series X'), 
+       ('NS', 'Nintendo Switch'), 
+       ('PC', 'Personal Computer'); 
+
+insert into catalogue (measurement_unit_id, catalogue_type_id, bulk_pack_id, producer_id, edition_id, language_id, platform_id, stock_code, name, alias, last_purchase_price, bulk_pack_capacity, no_bulk_pack_on_palette) 
+values (1, 1, 1, 1, 1, 1, 1, 'PS4G-0001', 'God of War 3', 'GoW3', 42.1, 15, 460), 
+       (1, 1, 1, 2, 1, 2, 4, 'XSXG-0001', 'Sunset Overdrive', 'SO', 38.7, 25, 380), 
+       (1, 1, 1, 3, 1, 2, 5, 'NSG-0001', 'The Legend of Zelda Breath of the Wild', 'BotW', 145.58, 35, 260), 
+       (1, 2, 5, 4, 6, 2, 6, 'PCG-0001', 'The Settlers', 'TST', 108.5, 15, 460), 
+       (2, 1, 3, 3, 3, 3, 5, 'NSG-0002', 'Xenoblade Chronicles 3', 'XC3', 215.65, 5, 300), 
+       (1, 3, 3, 2, 4, 2, 2, 'PADPS5-0001', 'Kontroler PS5', 'PADPS5', 187.9, 10, 340), 
+       (1, 4, 3, 3, 1, 2, 5, 'KONS-0001', 'Konsola Nintendo Switch', 'KNS', 322.87, 5, 300);
+
+insert into warehouse (name, code) 
+values ('Sklep Główny Reja', 'SGR'), 
+       ('Sklep Punkt Drugi Moniuszki', 'SPDM');
+
+insert into document_type (name, abbreviation, numeration_template) 
+values ('Paragon', 'PG', 'abbreviation next_no/MM/YYYY'), 
+       ('Faktura VAT', 'FV', 'abbreviation next_no/MM/YYYY');
+
+insert into trade_partner (name, email_address, phone_number, street, street_number, city, post_code, nip, regon) 
+values ('Kamil Zagórski', 'k-zagorski@op.pl', '587696147', 'Lubelska', '65', 'Radom', '26-600', null, null), 
+       ('Marcin Piechota', 'piechota.radom@wp.pl', '500600700', 'Kwiatowa', '1', 'Radom', '26-600', null, null), 
+       ('Sklep Gamefinity', 'gamefinity.radom@gmail.com', '798558774', 'Traugutta', '78', 'Radom', '26-600', '1234567890', '0987654321'),
+       ('Sklep AllPlay', 'allplay.videogames@wp.pl', '589314785', 'Młodzianowska', '47', 'Radom', '26-600', '5476981223', '16849321557489'),
+       ('Marcel Piechociński', 'mar.piech@onel.pl', '487694878', 'Rapackiego', '12/8', 'Radom', '26-600', '5896214785', '2598317564');
+
+insert into document_number_parts (warehouse_id, document_date, last_document_number) 
+values (1, '2022-12-05', 1),
+       (1, '2022-12-08', 2),
+       (2, '2022-12-15', 1),
+       (2, '2023-01-04', 1),
+       (1, '2023-01-08', 1),
+       (1, '2023-01-12', 2);
+
+insert into document (document_type_id, app_user_id, warehouse_from_id, trade_partner_id, number, total) 
+values (1, 1, 1, 2, '01/SGR/12/2022', null),
+       (1, 1, 1, 5, '02/SGR/12/2022', null),
+       (2, 1, 2, 1, '01/SPDM/12/2022', null),
+       (2, 1, 2, 4, '01/SPDM/01/2023', null),
+       (1, 1, 1, 2, '01/SGR/01/2023', null),
+       (1, 1, 1, 5, '02/SGR/01/2023', null);
+
+insert into item (document_id, catalogue_id, quantity, price, amount) 
+values (1, 1, 3, 55.9, 167.7),         -- dokument 1 
+       (1, 5, 1, 219.9, 219.9),        -- dokument 1
+       (2, 1, 2, 68.2, 136.4),         -- dokument 2
+       (2, 5, 1, 229.9, 229.9),        -- dokument 2
+       (2, 7, 2, 359.8, 719.6),        -- dokument 2
+       (3, 2, 2, 45.9, 45.9),          -- dokument 3
+       (3, 3, 3, 169.8, 590.4),        -- dokument 3
+       (3, 4, 2, 169.8, 339.6),        -- dokument 3
+       (4, 6, 3, 229.9, 689.7),        -- dokument 4
+       (4, 7, 2, 378.9, 757.8),        -- dokument 4
+       (5, 1, 1, 68.9, 68.9),          -- dokument 5
+       (5, 2, 1, 59.8, 59.8),          -- dokument 5
+       (5, 3, 1, 169.8, 169.8),        -- dokument 5
+       (6, 4, 1, 139.8, 139.8),        -- dokument 6
+       (6, 6, 2, 229.9, 459.8);        -- dokument 6
+
+
+
+-- Trigger function
+CREATE OR REPLACE FUNCTION public."UPDATE_TOTAL_ON_DOC"()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF STRICT SECURITY DEFINER
+AS $BODY$
+BEGIN
+UPDATE "document" SET total = total + new.amount WHERE id = new.document_id;
+RETURN NEW;
+END
+$BODY$;
+
+ALTER FUNCTION public."UPDATE_TOTAL_ON_DOC"()
+    OWNER TO artek;
+
+-- Trigger na Item
+CREATE CONSTRAINT TRIGGER "UPDATE_TOTAL_ON_DOC"
+    AFTER INSERT
+    ON public.item
+    DEFERRABLE INITIALLY DEFERRED
+    FOR EACH ROW
+    EXECUTE FUNCTION public."UPDATE_TOTAL_ON_DOC"();
+
