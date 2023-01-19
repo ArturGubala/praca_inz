@@ -95,7 +95,11 @@
                                 {{trade_partner.phone_number[3:6]}} {{trade_partner.phone_number[6:]}}</td>
                             <td data-label="Kod pocztowy">{{ trade_partner.post_code }}</td>
                             <td data-label="Miejscowość">{{ trade_partner.city }}</td>
+                            {% if trade_partner.nip == none %}
+                            <td class="is-hidden-mobile" data-label="NIP">-</td>
+                            {% else %}
                             <td class="is-hidden-mobile" data-label="NIP">{{ trade_partner.nip }}</td>
+                            {% endif %}
                             {% endfor %}
                     </tbody>
                 </table>

@@ -1,15 +1,14 @@
 from typing import Dict, List
-from unicodedata import decimal
 from flask import redirect, render_template, request, session, url_for, Response
 from flask.views import MethodView
 from flask_login import login_required, login_user, current_user, logout_user
-from sqlalchemy import extract
+from sqlalchemy import extract, func
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 
 from . import db
 from . import login_manager, bcrypt
-from .models import AppUser, Catalogue, CatalogueType, BulkPackType, Producer, MeasurementUnit, Document, DocumentType, Warehouse, TradePartner, DocumentNumberParts, Edition, Language, Platform
+from .models import AppUser, Catalogue, CatalogueType, BulkPackType, Producer, MeasurementUnit, Document, DocumentType, Warehouse, TradePartner, DocumentNumberParts, Edition, Language, Platform, Item
 from .forms import LoginForm, UpdateUserInformationForm, ChangePasswordForm, CatalogueAddForm, DocumentAddForm, DocumentPositionAddForm, ConfirmCancelDocumentForm, TradePartnerAddForm
 from .serializers import CatalogueSchema, DocumentSchema, ItemSchema, DocumentNumberPartsSchema, TradePartnerSchema
 from .error_message import MessageLevel, Message
@@ -90,7 +89,58 @@ class DashboardView(MethodView):
 
     @login_required
     def get(self):
-        return render_template(self.template_name, current_user=current_user)
+        num_of_trade_partners = TradePartner.query.count()
+        print(f'Kontrahenci: {num_of_trade_partners}', flush=True)
+
+        total_sales_curr_month = db.session.query(func.sum(Document.total)).filter(
+            extract('month', Document.date_added) == datetime.now().month).first()
+        print(f'Sprzedaz obecny miesiac: {total_sales_curr_month[0]}')
+
+        if ((datetime.now().month - 1) == 0):
+            last_month = 12
+        else:
+            last_month = datetime.now().month - 1
+
+        total_sales_last_month = db.session.query(func.sum(Document.total)).filter(
+            extract('month', Document.date_added) == last_month).first()
+        print(f'Sprzedaz poprzedni miesiac: {total_sales_last_month[0]}')
+
+        catalogues_with_biggest_sale_month = db.session.query(Catalogue.name, func.sum(Item.quantity)) \
+            .join(Document, Document.id == Item.document_id) \
+            .join(Catalogue, Catalogue.id == Item.catalogue_id) \
+            .filter(extract('month', Document.date_added) == datetime.now().month) \
+            .group_by(Catalogue.name) \
+            .order_by(func.sum(Item.quantity).desc()) \
+            .limit(3) \
+            .all()
+        print(
+            f'Najlepiej sprzedające się kartoteki w tym miesiacu: {catalogues_with_biggest_sale_month}', flush=True)
+
+        catalogues_with_smallest_sale_month = db.session.query(Catalogue.name, func.sum(Item.quantity)) \
+            .join(Document, Document.id == Item.document_id) \
+            .join(Catalogue, Catalogue.id == Item.catalogue_id) \
+            .filter(extract('month', Document.date_added) == datetime.now().month) \
+            .group_by(Catalogue.name) \
+            .order_by(func.sum(Item.quantity).asc()) \
+            .limit(3) \
+            .all()
+        print(
+            f'Najgorzej sprzedające się kartoteki w tym miesiacu: {catalogues_with_smallest_sale_month}', flush=True)
+
+        if (total_sales_last_month[0] is None or total_sales_curr_month[0] is None):
+            sales_comp_prev_month = 0.00
+        else:
+            sales_comp_prev_month = round((total_sales_curr_month[0] / total_sales_last_month[0]) * 100,
+                                          2)
+
+        return render_template(self.template_name,
+                               current_user=current_user,
+                               num_of_trade_partners=num_of_trade_partners,
+                               total_sales_curr_month=total_sales_curr_month[0],
+                               total_sales_last_month=total_sales_last_month[0],
+                               sales_comp_prev_month=sales_comp_prev_month,
+                               catalogues_with_biggest_sale_month=catalogues_with_biggest_sale_month,
+                               catalogues_with_smallest_sale_month=catalogues_with_smallest_sale_month)
 
 
 class CatalogueView(MethodView):
@@ -188,18 +238,6 @@ class CatalogueView(MethodView):
 
         catalogue = self.__get_catalogue_data()
         return render_template(self.template_name, current_user=current_user, catalogue=catalogue, catalogue_add_form=catalogue_add_form)
-
-
-# class DeleteProductFromCatalogueView(MethodView):
-#     methods = ["POST"]
-
-#     def post(self, id_product: int):
-#         # print(id_product, flush=True)
-#         catalogue_product_to_del = Catalogue.query.filter_by(id=id_product)
-#         catalogue_product_to_del.delete()
-#         db.session.commit()
-
-#         return redirect("/katalog")
 
 
 class ProfileView(MethodView):
@@ -418,7 +456,7 @@ class AddDocumentPositionView(MethodView):
             "number": self.__create_document_number(),
             "date_added": None,
             "modification_date": None,
-            "total": None
+            "total": 0
         }
 
         for key, value in session["document"].items():

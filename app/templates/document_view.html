@@ -1,16 +1,51 @@
 {% extends "base.html" %}{% block title %} Catalogue {% endblock %}
 {% block content %}
 <div class="card has-table">
-    <header class="card-header">
+    <header class="card-header is-block">
         <p class="card-header-title">
             <span class="icon"><i class="mdi mdi-clipboard-list"></i></span>
-            Dokument nr {{ document.number }}
+            Dokument nr {{ document.number }} ({{ document.document_type.name }}) z dnia {{
+            document.date_added.strftime("%d-%m-%Y") }}
         </p>
-        <div class="card-header-icon">
-            <button class="button is-primary js-modal-trigger" data-target="modal-js-example">
-                <span class="icon"><i class="mdi mdi-plus-box is-size-4"></i></span>
-            </button>
-        </div>
+        <hr class="my-1" style="background-color:#d5d5d5;" />
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+            Kontrahent
+        </p>
+        <p class="card-content ml-5">
+            {{ document.trade_partner.name }}
+        </p>
+        <p class="card-content ml-5">
+            ul. {{ document.trade_partner.street }} {{ document.trade_partner.street_number }}
+        </p>
+        <p class="card-content ml-5">
+            {{ document.trade_partner.post_code }} {{ document.trade_partner.city }}
+        </p>
+        <p class="card-content ml-5">
+            NIP: {{ document.trade_partner.nip }} REGON: {{ document.trade_partner.regon }}
+        </p>
+        <p class="card-content ml-5">
+            tel.: {{ document.trade_partner.phone_number }}
+        </p>
+        <p class="card-content ml-5">
+            <span class="has-text-weight-bold">email:</span> {{ document.trade_partner.email_address }}
+        </p>
+        <hr class="my-1" style="background-color:#d5d5d5;" />
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            Wystawił
+        </p>
+        <p class="card-content ml-5">
+            {{ document.app_user.name }} {{ document.app_user.surname }}
+        </p>
+        <hr class="my-1" style="background-color:#d5d5d5;" />
+        <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-warehouse"></i></span>
+            Miejsce wystawienia
+        </p>
+        <p class="card-content ml-5">
+            {{ document.warehouse_from.name}} ({{ document.warehouse_from.code }})
+        </p>
     </header>
 </div>
 <div class="card-content">
@@ -19,33 +54,44 @@
             <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
                 <thead>
                     <tr>
-                        <th>Kod magazynowy</th>
-                        <th>Ilość w zgrzewce</th>
-                        <th>Czas palenia</th>
-                        <th>Ilość</th>
-                        <th>Cena</th>
-                        <!-- <th></th> -->
+                        <th class="has-text-centered">Kod magazynowy</th>
+                        <th class="has-text-centered">Nazwa</th>
+                        <th class="has-text-centered">Platforma</th>
+                        <th class="has-text-centered">Wydanie</th>
+                        <th class="has-text-centered">Język</th>
+                        <th class="has-text-centered">Ilość</th>
+                        <th class="has-text-centered">Cena</th>
+                        <th class="has-text-centered">Wartość</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in document.items %}
                     <tr>
                         <td data-label="Kod magazynowy">{{ item.catalogue.stock_code }}</td>
-                        <td data-label="Ilość w zgrzewce">{{ item.catalogue.bulk_pack_capacity }}</td>
-                        <td data-label="Czas palenia">{{ item.catalogue.burning_time }}</td>
-                        <td data-label="Ilość">{{ item.quantity }}</td>
-                        <td data-label="Cena">{{ item.price }}</td>
-                        <!-- <td class="is-actions-cell">
-                            <div class="buttons is-right">
-                                <button data-document-id="{{ document.id }}"
-                                    class="button is-small is-primary card-header-icon card-toggle" type="button">
-                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
-                                </button>
-                            </div>
-                        </td> -->
+                        <td data-label="Nazwa">{{ item.catalogue.name }}</td>
+                        <td data-label="Platforma">
+                            {{ item.catalogue.platform.name }} ({{ item.catalogue.platform.alias }})
+                        </td>
+                        <td data-label="Wydanie">{{ item.catalogue.edition.name }}</td>
+                        <td data-label="Język">{{ item.catalogue.language.code_two_char }}</td>
+                        <td class="has-text-right" data-label="Ilość">{{ item.quantity }}</td>
+                        <td class="has-text-right" data-label="Cena">
+                            {{'{:0,.2f}'.format(item.price).replace(',', ' ') }}
+                        </td>
+                        <td class="has-text-right" data-label="Wartość">
+                            {{'{:0,.2f}'.format(item.amount).replace(',', ' ') }}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="has-text-weight-bold" colspan="5">RAZEM</td>
+                        <td class="has-text-right has-text-weight-bold" colspan="3">
+                            {{'{:0,.2f}'.format(document.total).replace(',', ' ') }}
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

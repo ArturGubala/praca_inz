@@ -118,3 +118,7 @@ documentViewBtns.forEach(btn => {
     window.location = `/dokument/${documentId}`;
   })
 });
+
+if (window.history.replaceState) {
+  window.history.replaceState(null, null, window.location.href);
+}

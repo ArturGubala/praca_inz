@@ -284,6 +284,8 @@ class Document(db.Model):
         "Warehouse", backref="warehouse_from", uselist=False, foreign_keys=[warehouse_from_id])
     trade_partner = db.relationship(
         "TradePartner", backref="trade_partner", uselist=False, foreign_keys=[trade_partner_id])
+    # app_user = db.relationship(
+    #     "AppUser", backref="app_user", uselist=False, foreign_keys=[app_user_id])
     items = db.relationship("Item", back_populates="document")
 
     def __init__(self, document_type_id: int, app_user_id: int, warehouse_from_id: int, trade_partner_id: int,
